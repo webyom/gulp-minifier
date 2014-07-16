@@ -10,6 +10,7 @@ gulp.task 'example', ->
 	minify = require './lib/index'
 	gulp.src('example/src/**/*')
 		.pipe minify
+			minify: true
 			collapseWhitespace: true
 			conservativeCollapse: true
 			minifyJS: true
