@@ -8,8 +8,10 @@ UglifyJS = require 'uglify-js'
 
 module.exports = (opt) ->
 	through.obj (file, enc, next) ->
-		return @emit 'error', new gutil.PluginError('gulp-minifier', 'File can\'t be null') if file.isNull()
 		return @emit 'error', new gutil.PluginError('gulp-minifier', 'Streams not supported') if file.isStream()
+		if file.isNull()
+			@push file
+			return next()
 		if opt.minify
 			extname = path.extname file.path
 			content = file.contents.toString()
