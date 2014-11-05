@@ -1,5 +1,1 @@
-(function() {
-	var hello = 'hello';
-	var world = 'world';
-	console.log(hello, world);
-})();
+!function(){var o="hello",l="world";console.log(o,l)}();

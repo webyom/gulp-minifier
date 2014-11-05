@@ -6,6 +6,27 @@ minifier = require 'html-minifier'
 CleanCSS = require 'clean-css'
 UglifyJS = require 'uglify-js'
 
+EOL = '\n'
+
+logErr = (e, file) ->
+	console.log 'gulp-minifier Error:', e.message
+	console.log 'file:', file.path
+	if e.line
+		console.log getErrorStack file.contents.toString(), e.line
+
+getErrorStack = (content, line) ->
+	startLine = Math.max 1, line - 2
+	maxLineNoLen = 0
+	content = content.split(/\n|\r\n|\r/).slice startLine - 1, line + 2
+	content.forEach (l, i) ->
+		lineNo = (startLine + i) + (if startLine + i is line then ' ->' else '   ') + '| '
+		maxLineNoLen = Math.max(maxLineNoLen, lineNo.length)
+		content[i] = lineNo + l
+	content.forEach (l, i) ->
+		if l.split('|')[0].length + 2 < maxLineNoLen
+			content[i] = ' ' + l
+	content.join EOL
+
 module.exports = (opt) ->
 	through.obj (file, enc, next) ->
 		return @emit 'error', new gutil.PluginError('gulp-minifier', 'Streams not supported') if file.isStream()
@@ -20,16 +41,25 @@ module.exports = (opt) ->
 						else
 							minifyJS = {}
 						minifyJS.fromString = true
-						content = UglifyJS.minify(content, minifyJS).code
+						try
+							content = UglifyJS.minify(content, minifyJS).code
+						catch e
+							logErr e, file
 				else if extname is '.css'
 					if opt.minifyCSS
 						if typeof opt.minifyCSS is 'object'
 							minifyCSS = opt.minifyCSS
 						else
 							minifyCSS = {}
-						content = new CleanCSS(minifyCSS).minify content
+						try
+							content = new CleanCSS(minifyCSS).minify content
+						catch e
+							logErr e, file
 				else
-					content = minifier.minify content, opt
+					try
+						content = minifier.minify content, opt
+					catch e
+						logErr e, file
 				file.contents = new Buffer content
 		@push file
 		next()
