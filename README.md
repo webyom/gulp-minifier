@@ -5,7 +5,7 @@ Minify HTML, JS, CSS with html-minifier, UglifyJS, CleanCSS.
 For example:
 
 ```js
-var minifyHTML = require('gulp-minifier');
+var minify = require('gulp-minifier');
 
 gulp.task('example', function() {
   return gulp.src('example/src/**/*').pipe(minify({
