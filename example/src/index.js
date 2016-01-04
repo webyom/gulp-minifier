@@ -1,3 +1,7 @@
+/*!
+ * Copyright
+ */
+
 (function() {
 	var hello = 'hello';
 	var world = 'world';

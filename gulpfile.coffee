@@ -15,6 +15,9 @@ gulp.task 'example', ->
 			conservativeCollapse: true
 			minifyJS: true
 			minifyCSS: true
+			getKeptComment: (content, filePath) ->
+				m = content.match /\/\*![\s\S]*?\*\//img
+				m && m.join('\n') + '\n' || ''
 		.pipe gulp.dest('example/dest')
 
 gulp.task 'default', ['compile']

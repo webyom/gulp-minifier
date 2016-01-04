@@ -37,23 +37,26 @@ module.exports = (opt) ->
 				content = file.contents.toString()
 				if extname is '.js'
 					if opt.minifyJS
+						keptComment = if opt.getKeptComment then opt.getKeptComment(content, file.path) else ''
 						if typeof opt.minifyJS is 'object'
 							minifyJS = opt.minifyJS
 						else
 							minifyJS = {}
 						minifyJS.fromString = true
 						try
-							content = UglifyJS.minify(content, minifyJS).code
+							content = keptComment + UglifyJS.minify(content, minifyJS).code
 						catch e
 							logErr e, file
 				else if extname is '.css'
 					if opt.minifyCSS
+						keptComment = if opt.getKeptComment then opt.getKeptComment(content, file.path) else ''
 						if typeof opt.minifyCSS is 'object'
 							minifyCSS = opt.minifyCSS
 						else
 							minifyCSS = {}
+						minifyCSS.keepSpecialComments = 0
 						try
-							content = new CleanCSS(minifyCSS).minify content
+							content = keptComment + new CleanCSS(minifyCSS).minify content
 						catch e
 							logErr e, file
 				else

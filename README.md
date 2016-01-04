@@ -13,7 +13,11 @@ gulp.task('example', function() {
     collapseWhitespace: true,
     conservativeCollapse: true,
     minifyJS: true,
-    minifyCSS: true
+    minifyCSS: true,
+    getKeptComment: function (content, filePath) {
+        var m = content.match(/\/\*![\s\S]*?\*\//img);
+        return m && m.join('\n') + '\n' || '';
+    }
   })).pipe(gulp.dest('example/dest'));
 });
 ```
