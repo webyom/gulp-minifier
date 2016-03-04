@@ -32,38 +32,42 @@ module.exports = (opt) ->
 		return @emit 'error', new gutil.PluginError('gulp-minifier', 'Streams not supported') if file.isStream()
 		includeExtNameMap = opt.includeExtNameMap or {}
 		if not file.isNull() and opt.minify
-			extname = path.extname file.path
-			if extname in ['.js', '.css', '.html'] or includeExtNameMap[extname]
-				content = file.contents.toString()
-				if extname is '.js'
-					if opt.minifyJS
-						keptComment = if opt.getKeptComment then opt.getKeptComment(content, file.path) else ''
-						if typeof opt.minifyJS is 'object'
-							minifyJS = opt.minifyJS
-						else
-							minifyJS = {}
-						minifyJS.fromString = true
-						try
-							content = keptComment + UglifyJS.minify(content, minifyJS).code
-						catch e
-							logErr e, file
-				else if extname is '.css'
-					if opt.minifyCSS
-						keptComment = if opt.getKeptComment then opt.getKeptComment(content, file.path) else ''
-						if typeof opt.minifyCSS is 'object'
-							minifyCSS = opt.minifyCSS
-						else
-							minifyCSS = {}
-						minifyCSS.keepSpecialComments = 0
-						try
-							content = keptComment + new CleanCSS(minifyCSS).minify content
-						catch e
-							logErr e, file
-				else
-					try
-						content = minifier.minify content, opt
-					catch e
-						logErr e, file
-				file.contents = new Buffer content
+			module.exports.minify(file, opt)
 		@push file
 		next()
+
+module.exports.minify = (file, opt) ->
+	extname = path.extname file.path
+	if extname in ['.js', '.css', '.html'] or includeExtNameMap[extname]
+		content = file.contents.toString()
+		if extname is '.js'
+			if opt.minifyJS
+				keptComment = if opt.getKeptComment then opt.getKeptComment(content, file.path) else ''
+				if typeof opt.minifyJS is 'object'
+					minifyJS = opt.minifyJS
+				else
+					minifyJS = {}
+				minifyJS.fromString = true
+				try
+					content = keptComment + UglifyJS.minify(content, minifyJS).code
+				catch e
+					logErr e, file
+		else if extname is '.css'
+			if opt.minifyCSS
+				keptComment = if opt.getKeptComment then opt.getKeptComment(content, file.path) else ''
+				if typeof opt.minifyCSS is 'object'
+					minifyCSS = opt.minifyCSS
+				else
+					minifyCSS = {}
+				minifyCSS.keepSpecialComments = 0
+				try
+					content = keptComment + new CleanCSS(minifyCSS).minify content
+				catch e
+					logErr e, file
+		else
+			try
+				content = minifier.minify content, opt
+			catch e
+				logErr e, file
+		file.contents = new Buffer content
+	file

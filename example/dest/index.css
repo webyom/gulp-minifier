@@ -1,4 +1,4 @@
 /*!
  * Copyright
  */
-.menu{width:100px;height:20px}
+.menu{width:100px;height:20px;content:'';background:url(pic.png)}
