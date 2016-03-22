@@ -30,13 +30,13 @@ getErrorStack = (content, line) ->
 module.exports = (opt) ->
 	through.obj (file, enc, next) ->
 		return @emit 'error', new gutil.PluginError('gulp-minifier', 'Streams not supported') if file.isStream()
-		includeExtNameMap = opt.includeExtNameMap or {}
 		if not file.isNull() and opt.minify
 			module.exports.minify(file, opt)
 		@push file
 		next()
 
 module.exports.minify = (file, opt) ->
+	includeExtNameMap = opt.includeExtNameMap or {}
 	extname = path.extname file.path
 	if extname in ['.js', '.css', '.html'] or includeExtNameMap[extname]
 		content = file.contents.toString()
