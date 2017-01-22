@@ -1,0 +1,1 @@
+{"version":3,"sources":["index.js"],"names":["hello","world","console","log"],"mappings":"CAIA,WACC,GAAIA,GAAQ,QACRC,EAAQ,OACZC,SAAQC,IAAIH,EAAOC","file":"index.js","sourcesContent":["/*!\n * Copyright\n */\n\n(function() {\n\tvar hello = 'hello';\n\tvar world = 'world';\n\tconsole.log(hello, world);\n})();"]}

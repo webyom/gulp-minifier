@@ -1,3 +1,4 @@
+_ = require 'lodash'
 fs = require 'fs'
 path = require 'path'
 gutil = require 'gulp-util'
@@ -33,6 +34,8 @@ module.exports = (opt) ->
 		if not file.isNull() and opt.minify
 			module.exports.minify(file, opt)
 		@push file
+		if file._sourceMapFile
+			@push file._sourceMapFile
 		next()
 
 module.exports.minify = (file, opt) ->
@@ -43,25 +46,41 @@ module.exports.minify = (file, opt) ->
 		if extname is '.js'
 			if opt.minifyJS
 				keptComment = if opt.getKeptComment then opt.getKeptComment(content, file.path) else ''
-				if typeof opt.minifyJS is 'object'
-					minifyJS = opt.minifyJS
-				else
-					minifyJS = {}
+				minifyJS = _.extend {}, opt.minifyJS
 				minifyJS.fromString = true
+				if minifyJS.outSourceMap
+					minifyJS.outSourceMap = path.basename(file.path) + '.map'
 				try
-					content = keptComment + UglifyJS.minify(content, minifyJS).code
+					source = {}
+					source[path.basename(file.path)] = content
+					result = UglifyJS.minify(source, minifyJS)
+					content = keptComment + result.code
+					if minifyJS.outSourceMap
+						newFile = new gutil.File
+							base: file.base
+							cwd: file.cwd
+							path: file.path + '.map'
+							contents: new Buffer result.map
+						file._sourceMapFile = newFile
 				catch e
 					logErr e, file
 		else if extname is '.css'
 			if opt.minifyCSS
 				keptComment = if opt.getKeptComment then opt.getKeptComment(content, file.path) else ''
-				if typeof opt.minifyCSS is 'object'
-					minifyCSS = opt.minifyCSS
-				else
-					minifyCSS = {}
+				minifyCSS = _.extend {}, opt.minifyCSS
 				minifyCSS.keepSpecialComments = 0
 				try
-					content = keptComment + new CleanCSS(minifyCSS).minify content
+					source = {}
+					source[path.basename(file.path)] = styles: content
+					result = new CleanCSS(minifyCSS).minify source
+					content = keptComment + result.styles
+					if minifyCSS.sourceMap
+						newFile = new gutil.File
+							base: file.base
+							cwd: file.cwd
+							path: file.path + '.map'
+							contents: new Buffer result.sourceMap.toString()
+						file._sourceMapFile = newFile
 				catch e
 					logErr e, file
 		else

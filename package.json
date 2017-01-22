@@ -1,6 +1,6 @@
 {
   "name": "gulp-minifier",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "description": "Minify HTML, JS, CSS with html-minifier, UglifyJS, CleanCSS.",
   "keywords": [
     "html",
@@ -30,14 +30,14 @@
   "engines": {
     "node": ">= 0.8.0"
   },
-  "scripts": {
-  },
+  "scripts": {},
   "dependencies": {
+    "clean-css": "^3.4.24",
     "gulp-util": "^2.2.19",
+    "html-minifier": "^3.2.3",
+    "lodash": "^4.17.4",
     "through2": "^0.5.1",
-    "html-minifier": "^0.6.5",
-    "clean-css": "^2.2.8",
-    "uglify-js": "^2.4.15"
+    "uglify-js": "^2.7.5"
   },
   "devDependencies": {
     "gulp": "^3.8.5",

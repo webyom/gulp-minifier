@@ -1,0 +1,1 @@
+{"version":3,"sources":["index.css"],"names":[],"mappings":"AAIA,MACC,MAAO,MACP,OAAQ,KACR,QAAS,GACT,WAAY","sourcesContent":["/*!\n * Copyright\n */\n \n.menu {\n\twidth: 100px;\n\theight: 20px;\n\tcontent: '';\n\tbackground: url(pic.png);\n}"]}

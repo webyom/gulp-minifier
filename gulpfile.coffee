@@ -13,8 +13,12 @@ gulp.task 'example', ->
 			minify: true
 			collapseWhitespace: true
 			conservativeCollapse: true
-			minifyJS: true
-			minifyCSS: true
+			minifyJS:
+				outSourceMap: true
+				sourceMapIncludeSources: true
+			minifyCSS:
+				sourceMap: true
+				sourceMapInlineSources: true
 			getKeptComment: (content, filePath) ->
 				m = content.match /\/\*![\s\S]*?\*\//img
 				m && m.join('\n') + '\n' || ''
