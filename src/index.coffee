@@ -75,6 +75,7 @@ module.exports.minify = (file, opt) ->
 					result = new CleanCSS(minifyCSS).minify source
 					content = keptComment + result.styles
 					if minifyCSS.sourceMap
+						content = content + '\n/*# sourceMappingURL=' + path.basename(file.path) + '.map */'
 						newFile = new gutil.File
 							base: file.base
 							cwd: file.cwd
