@@ -3,9 +3,9 @@ fs = require 'fs'
 path = require 'path'
 gutil = require 'gulp-util'
 through = require 'through2'
-minifier = require 'html-minifier'
+HtmlMinifier = require 'html-minifier'
 CleanCSS = require 'clean-css'
-UglifyJS = require 'uglify-js'
+UglifyJS = require 'uglify-es'
 
 EOL = '\n'
 
@@ -47,15 +47,24 @@ module.exports.minify = (file, opt) ->
 			if opt.minifyJS
 				keptComment = if opt.getKeptComment then opt.getKeptComment(content, file.path) else ''
 				minifyJS = _.extend {}, opt.minifyJS
-				minifyJS.fromString = true
-				if minifyJS.outSourceMap
-					minifyJS.outSourceMap = path.basename(file.path) + '.map'
+				if minifyJS.sourceMap
+					fileName = path.basename file.path
+					sourceMapUrl = fileName + '.map'
+					if typeof minifyJS.sourceMap is 'object' and minifyJS.sourceMap.root
+						minifyJS.sourceMap =
+							root: minifyJS.sourceMap.root
+							url: path.join minifyJS.sourceMap.root, sourceMapUrl
+					else
+						minifyJS.sourceMap =
+							filename: fileName
+							url: sourceMapUrl
 				try
 					source = {}
 					source[path.basename(file.path)] = content
 					result = UglifyJS.minify(source, minifyJS)
+					throw result.error if result.error
 					content = keptComment + result.code
-					if minifyJS.outSourceMap
+					if minifyJS.sourceMap
 						newFile = new gutil.File
 							base: file.base
 							cwd: file.cwd
@@ -85,9 +94,11 @@ module.exports.minify = (file, opt) ->
 				catch e
 					logErr e, file
 		else
-			try
-				content = minifier.minify content, opt
-			catch e
-				logErr e, file
+			if opt.minifyHTML
+				try
+					minifyHTML = _.extend {}, opt.minifyHTML
+					content = HtmlMinifier.minify content, minifyHTML
+				catch e
+					logErr e, file
 		file.contents = new Buffer content
 	file

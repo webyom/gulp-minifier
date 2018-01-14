@@ -1,6 +1,6 @@
 # gulp-minifier
 
-Minify HTML, JS, CSS with html-minifier, UglifyJS, CleanCSS.
+Minify HTML, JS, CSS with html-minifier, uglify-es, clean-css.
 
 For example:
 
@@ -10,9 +10,13 @@ var minify = require('gulp-minifier');
 gulp.task('example', function() {
   return gulp.src('example/src/**/*').pipe(minify({
     minify: true,
-    collapseWhitespace: true,
-    conservativeCollapse: true,
-    minifyJS: true,
+    minifyHTML: {
+      collapseWhitespace: true,
+      conservativeCollapse: true,
+    },
+    minifyJS: {
+      sourceMap: true
+    },
     minifyCSS: true,
     getKeptComment: function (content, filePath) {
         var m = content.match(/\/\*![\s\S]*?\*\//img);

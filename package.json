@@ -1,9 +1,11 @@
 {
   "name": "gulp-minifier",
-  "version": "0.2.2",
-  "description": "Minify HTML, JS, CSS with html-minifier, UglifyJS, CleanCSS.",
+  "version": "1.0.0",
+  "description": "Minify HTML, JS, CSS with html-minifier, uglify-es, clean-css.",
   "keywords": [
     "html",
+    "js",
+    "css",
     "minifier",
     "gulpplugin"
   ],
@@ -37,7 +39,7 @@
     "html-minifier": "^3.2.3",
     "lodash": "^4.17.4",
     "through2": "^0.5.1",
-    "uglify-js": "^2.8.20"
+    "uglify-es": "^3.3.6"
   },
   "devDependencies": {
     "gulp": "^3.8.5",
