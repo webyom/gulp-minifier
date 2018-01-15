@@ -1,7 +1,8 @@
 _ = require 'lodash'
 fs = require 'fs'
 path = require 'path'
-gutil = require 'gulp-util'
+Vinyl = require 'vinyl'
+PluginError = require 'plugin-error'
 through = require 'through2'
 HtmlMinifier = require 'html-minifier'
 CleanCSS = require 'clean-css'
@@ -30,7 +31,7 @@ getErrorStack = (content, line) ->
 
 module.exports = (opt) ->
 	through.obj (file, enc, next) ->
-		return @emit 'error', new gutil.PluginError('gulp-minifier', 'Streams not supported') if file.isStream()
+		return @emit 'error', new PluginError('gulp-minifier', 'Streams not supported') if file.isStream()
 		if not file.isNull() and opt.minify
 			module.exports.minify(file, opt)
 		@push file
@@ -65,7 +66,7 @@ module.exports.minify = (file, opt) ->
 					throw result.error if result.error
 					content = keptComment + result.code
 					if minifyJS.sourceMap
-						newFile = new gutil.File
+						newFile = new Vinyl
 							base: file.base
 							cwd: file.cwd
 							path: file.path + '.map'
@@ -85,7 +86,7 @@ module.exports.minify = (file, opt) ->
 					content = keptComment + result.styles
 					if minifyCSS.sourceMap
 						content = content + '\n/*# sourceMappingURL=' + path.basename(file.path) + '.map */'
-						newFile = new gutil.File
+						newFile = new Vinyl
 							base: file.base
 							cwd: file.cwd
 							path: file.path + '.map'

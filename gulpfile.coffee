@@ -11,11 +11,11 @@ gulp.task 'example', ->
 	gulp.src('example/src/**/*')
 		.pipe minify
 			minify: true
-			collapseWhitespace: true
-			conservativeCollapse: true
+			minifyHTML:
+				collapseWhitespace: true
+				conservativeCollapse: true
 			minifyJS:
-				outSourceMap: true
-				sourceMapIncludeSources: true
+				sourceMap: true
 			minifyCSS:
 				sourceMap: true
 				sourceMapInlineSources: true
