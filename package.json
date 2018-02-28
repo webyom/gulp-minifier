@@ -1,6 +1,6 @@
 {
   "name": "gulp-minifier",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Minify HTML, JS, CSS with html-minifier, uglify-es, clean-css.",
   "keywords": [
     "html",

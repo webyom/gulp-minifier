@@ -46,17 +46,18 @@ module.exports.minify = (file, opt) ->
 		content = file.contents.toString()
 		if extname is '.js'
 			if opt.minifyJS
-				keptComment = if opt.getKeptComment then opt.getKeptComment(content, file.path) else ''
 				minifyJS = _.extend {}, opt.minifyJS
 				if minifyJS.sourceMap
 					fileName = path.basename file.path
 					sourceMapUrl = fileName + '.map'
 					if typeof minifyJS.sourceMap is 'object' and minifyJS.sourceMap.root
 						minifyJS.sourceMap =
+							includeSources: true
 							root: minifyJS.sourceMap.root
 							url: path.join minifyJS.sourceMap.root, sourceMapUrl
 					else
 						minifyJS.sourceMap =
+							includeSources: true
 							filename: fileName
 							url: sourceMapUrl
 				try
@@ -64,7 +65,7 @@ module.exports.minify = (file, opt) ->
 					source[path.basename(file.path)] = content
 					result = UglifyJS.minify(source, minifyJS)
 					throw result.error if result.error
-					content = keptComment + result.code
+					content = result.code
 					if minifyJS.sourceMap
 						newFile = new Vinyl
 							base: file.base
@@ -76,14 +77,12 @@ module.exports.minify = (file, opt) ->
 					logErr e, file
 		else if extname is '.css'
 			if opt.minifyCSS
-				keptComment = if opt.getKeptComment then opt.getKeptComment(content, file.path) else ''
 				minifyCSS = _.extend {}, opt.minifyCSS
-				minifyCSS.keepSpecialComments = 0
 				try
 					source = {}
 					source[path.basename(file.path)] = styles: content
 					result = new CleanCSS(minifyCSS).minify source
-					content = keptComment + result.styles
+					content = result.styles
 					if minifyCSS.sourceMap
 						content = content + '\n/*# sourceMappingURL=' + path.basename(file.path) + '.map */'
 						newFile = new Vinyl
