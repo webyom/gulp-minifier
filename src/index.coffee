@@ -52,12 +52,12 @@ module.exports.minify = (file, opt) ->
 					sourceMapUrl = fileName + '.map'
 					if typeof minifyJS.sourceMap is 'object' and minifyJS.sourceMap.root
 						minifyJS.sourceMap =
-							includeSources: true
+							includeSources: minifyJS.sourceMap.includeSources
 							root: minifyJS.sourceMap.root
 							url: path.join minifyJS.sourceMap.root, sourceMapUrl
 					else
 						minifyJS.sourceMap =
-							includeSources: true
+							includeSources: if typeof minifyJS.sourceMap is 'object' then minifyJS.sourceMap.includeSources else true
 							filename: fileName
 							url: sourceMapUrl
 				try
