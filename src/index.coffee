@@ -34,9 +34,9 @@ module.exports = (opt) ->
 		return @emit 'error', new PluginError('gulp-minifier', 'Streams not supported') if file.isStream()
 		if not file.isNull() and opt.minify
 			module.exports.minify(file, opt)
-		@push file
 		if file._sourceMapFile
 			@push file._sourceMapFile
+		@push file
 		next()
 
 module.exports.minify = (file, opt) ->
