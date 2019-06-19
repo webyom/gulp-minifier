@@ -1,13 +1,13 @@
 gulp = require 'gulp'
 coffee = require 'gulp-coffee'
+minify = require './lib/index'
 
-gulp.task 'compile', ->
+compile = () ->
 	gulp.src('src/**/*.coffee')
 		.pipe coffee()
 		.pipe gulp.dest('lib')
 
-gulp.task 'example', ->
-	minify = require './lib/index'
+example = () ->
 	gulp.src('example/src/**/*')
 		.pipe minify
 			minify: true
@@ -24,4 +24,6 @@ gulp.task 'example', ->
 				m && m.join('\n') + '\n' || ''
 		.pipe gulp.dest('example/dest')
 
-gulp.task 'default', ['compile']
+exports.compile = compile
+exports.example = example
+exports.default = compile
