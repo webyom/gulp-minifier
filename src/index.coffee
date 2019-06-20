@@ -71,7 +71,7 @@ module.exports.minify = (file, opt) ->
 							base: file.base
 							cwd: file.cwd
 							path: file.path + '.map'
-							contents: new Buffer result.map
+							contents: Buffer.from result.map
 						file._sourceMapFile = newFile
 				catch e
 					logErr e, file
@@ -89,7 +89,7 @@ module.exports.minify = (file, opt) ->
 							base: file.base
 							cwd: file.cwd
 							path: file.path + '.map'
-							contents: new Buffer result.sourceMap.toString()
+							contents: Buffer.from result.sourceMap.toString()
 						file._sourceMapFile = newFile
 				catch e
 					logErr e, file
@@ -100,5 +100,5 @@ module.exports.minify = (file, opt) ->
 					content = HtmlMinifier.minify content, minifyHTML
 				catch e
 					logErr e, file
-		file.contents = new Buffer content
+		file.contents = Buffer.from content
 	file
