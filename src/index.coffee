@@ -6,7 +6,7 @@ PluginError = require 'plugin-error'
 through = require 'through2'
 HtmlMinifier = require 'html-minifier'
 CleanCSS = require 'clean-css'
-UglifyJS = require 'uglify-es'
+Terser = require 'terser'
 
 EOL = '\n'
 
@@ -63,7 +63,7 @@ module.exports.minify = (file, opt) ->
 				try
 					source = {}
 					source[path.basename(file.path)] = content
-					result = UglifyJS.minify(source, minifyJS)
+					result = Terser.minify(source, minifyJS)
 					throw result.error if result.error
 					content = result.code
 					if minifyJS.sourceMap
