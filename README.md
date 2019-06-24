@@ -1,6 +1,6 @@
 # gulp-minifier
 
-Minify HTML, JS, CSS with html-minifier, uglify-es, clean-css.
+Minify HTML, JS, CSS with html-minifier, terser, clean-css.
 
 For example:
 
