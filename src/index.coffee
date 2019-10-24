@@ -48,18 +48,15 @@ module.exports.minify = (file, opt) ->
 			if opt.minifyJS
 				minifyJS = _.extend {}, opt.minifyJS
 				if minifyJS.sourceMap
+					sourceMap = if typeof minifyJS.sourceMap is 'object' then minifyJS.sourceMap else {}
 					fileName = path.basename file.path
 					sourceMapUrl = fileName + '.map'
-					if typeof minifyJS.sourceMap is 'object' and minifyJS.sourceMap.root
-						minifyJS.sourceMap =
-							includeSources: minifyJS.sourceMap.includeSources
-							root: minifyJS.sourceMap.root
-							url: path.join minifyJS.sourceMap.root, sourceMapUrl
-					else
-						minifyJS.sourceMap =
-							includeSources: if typeof minifyJS.sourceMap is 'object' then minifyJS.sourceMap.includeSources else true
-							filename: fileName
-							url: sourceMapUrl
+					minifyJS.sourceMap =
+						includeSources: sourceMap.includeSources isnt false
+						filename: fileName
+						url: if sourceMap.hidden then undefined else sourceMapUrl
+					if fs.existsSync file.path + '.map'
+						minifyJS.sourceMap.content = fs.readFileSync(file.path + '.map').toString()
 				try
 					source = {}
 					source[path.basename(file.path)] = content
