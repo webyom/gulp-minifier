@@ -54,7 +54,7 @@ module.exports.minify = (file, opt) ->
 					minifyJS.sourceMap =
 						includeSources: sourceMap.includeSources isnt false
 						filename: fileName
-						url: if sourceMap.hidden then undefined else sourceMapUrl
+						url: if sourceMap.getUrl then sourceMap.getUrl(file.path) else sourceMapUrl
 					if fs.existsSync file.path + '.map'
 						minifyJS.sourceMap.content = fs.readFileSync(file.path + '.map').toString()
 				try
