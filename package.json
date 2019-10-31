@@ -1,6 +1,6 @@
 {
   "name": "gulp-minifier",
-  "version": "3.3.0",
+  "version": "3.4.0",
   "description": "Minify HTML, JS, CSS with html-minifier, terser, clean-css.",
   "keywords": [
     "html",
@@ -33,7 +33,7 @@
     "html-minifier": "^4.0.0",
     "lodash": "^4.17.4",
     "plugin-error": "^1.0.0",
-    "terser": "^4.0.0",
+    "terser": "^4.3.9",
     "through2": "^3.0.1",
     "vinyl": "^2.1.0"
   },
