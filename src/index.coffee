@@ -7,6 +7,7 @@ through = require 'through2'
 HtmlMinifier = require 'html-minifier'
 CleanCSS = require 'clean-css'
 Terser = require 'terser'
+envifyReplace = require 'loose-envify/replace'
 
 EOL = '\n'
 
@@ -58,6 +59,7 @@ module.exports.minify = (file, opt) ->
 					if fs.existsSync file.path + '.map'
 						minifyJS.sourceMap.content = fs.readFileSync(file.path + '.map').toString()
 				try
+					content = envifyReplace content, [opt.env || process.env]
 					source = {}
 					source[path.basename(file.path)] = content
 					result = Terser.minify(source, minifyJS)
