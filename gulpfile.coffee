@@ -19,8 +19,6 @@ example = () ->
 			minifyCSS:
 				sourceMap: true
 				sourceMapInlineSources: true
-			env:
-				NODE_ENV: process.env.NODE_ENV || 'development'
 			getKeptComment: (content, filePath) ->
 				m = content.match /\/\*![\s\S]*?\*\//img
 				m && m.join('\n') + '\n' || ''
