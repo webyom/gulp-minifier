@@ -4,7 +4,7 @@ path = require 'path'
 Vinyl = require 'vinyl'
 PluginError = require 'plugin-error'
 through = require 'through2'
-HtmlMinifier = require 'html-minifier'
+HtmlMinifier = require 'html-minifier-terser'
 CleanCSS = require 'clean-css'
 Terser = require 'terser'
 

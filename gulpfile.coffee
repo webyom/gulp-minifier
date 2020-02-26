@@ -1,6 +1,6 @@
 gulp = require 'gulp'
 coffee = require 'gulp-coffee'
-minify = require './lib/index'
+minify = require './src/index'
 
 compile = () ->
 	gulp.src('src/**/*.coffee')
